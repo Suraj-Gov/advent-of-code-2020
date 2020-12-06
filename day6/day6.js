@@ -1,4 +1,5 @@
 var fs = require("fs");
+const { cpuUsage } = require("process");
 
 const input = fs
   .readFileSync("./input.txt", {
@@ -26,28 +27,22 @@ const countQuestions = () => {
 };
 
 const countCommonYesQuestions = () => {
-  return separatedInputs.slice(2, 3).reduce((total, group) => {
-    let questions = {};
-    let groupQuestionCount = group.reduce((total, question) => {
-      question.split("").forEach((q) => {
-        if (questions[q] === undefined) {
-          questions[q] = 1;
-        } else questions[q] += 1;
+  let questionsMap = {};
+  return separatedInputs.reduce((total, currGroup) => {
+    currGroup.forEach((person) => {
+      person.split("").forEach((question) => {
+        if (questionsMap[question] === undefined) {
+          questionsMap[question] = 1;
+        } else questionsMap[question] += 1;
       });
-      const totalMembers = question.split("").length;
-
-      const x = Object.entries(questions).reduce(
-        (totalCommonQuestions, question) => {
-          return question[1] === totalMembers
-            ? totalCommonQuestions + 1
-            : totalCommonQuestions;
-        },
-        0
-      );
-      return total + x;
-    }, 0);
-    total = total + groupQuestionCount;
-    questions = {};
+    });
+    const people = currGroup.length;
+    Object.entries(questionsMap).forEach((question) => {
+      if (question[1] === people) {
+        total += 1;
+      }
+    });
+    questionsMap = {};
     return total;
   }, 0);
 };
