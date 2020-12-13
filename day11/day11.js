@@ -9,36 +9,64 @@ const input = fs
 
 const size = input.length;
 
+const checkBounds = (r, c) => {
+  return r < 0 || r >= size || c < 0 || c >= size ? true : false;
+};
+
 const top = (arr, r, c, opt) => {
-  return r > 0 ? arr[r - 1][c] === opt : false;
+  const returnVal = r > 0 ? arr[r - 1][c] : false;
+  if (returnVal === ".") {
+    return top(arr, r - 1, c, opt);
+  } else return returnVal === opt;
 };
 
 const bottom = (arr, r, c, opt) => {
-  return r < size - 1 ? arr[r + 1][c] === opt : false;
+  const returnVal = r < size - 1 ? arr[r + 1][c] : false;
+  if (returnVal === ".") {
+    return bottom(arr, r + 1, c, opt);
+  } else return returnVal === opt;
 };
 
 const left = (arr, r, c, opt) => {
-  return c > 0 ? arr[r][c - 1] === opt : false;
+  const returnVal = c > 0 ? arr[r][c - 1] : false;
+  if (returnVal !== ".") {
+    return returnVal === opt;
+  } else return left(arr, r, c - 1, opt);
 };
 
 const right = (arr, r, c, opt) => {
-  return c < size - 1 ? arr[r][c + 1] === opt : false;
+  const returnVal = c < size - 1 ? arr[r][c + 1] : false;
+  if (returnVal === ".") {
+    return right(arr, r, c + 1, opt);
+  } else return returnVal === opt;
 };
 
 const topLeft = (arr, r, c, opt) => {
-  return r > 0 && c > 0 ? arr[r - 1][c - 1] === opt : false;
+  const returnVal = r > 0 && c > 0 ? arr[r - 1][c - 1] : false;
+  if (returnVal === ".") {
+    return topLeft(arr, r - 1, c - 1, opt);
+  } else return returnVal === opt;
 };
 
 const topRight = (arr, r, c, opt) => {
-  return r > 0 && c < size - 1 ? arr[r - 1][c + 1] === opt : false;
+  const returnVal = r > 0 && c < size - 1 ? arr[r - 1][c + 1] : false;
+  if (returnVal === ".") {
+    return topRight(arr, r - 1, c + 1, opt);
+  } else return returnVal === opt;
 };
 
 const bottomLeft = (arr, r, c, opt) => {
-  return r < size - 1 && c > 0 ? arr[r + 1][c - 1] === opt : false;
+  const returnVal = r < size - 1 && c > 0 ? arr[r + 1][c - 1] : false;
+  if (returnVal === ".") {
+    return bottomLeft(arr, r + 1, c - 1, opt);
+  } else return returnVal === opt;
 };
 
 const bottomRight = (arr, r, c, opt) => {
-  return r < size - 1 && c < size - 1 ? arr[r + 1][c + 1] === opt : false;
+  const returnVal = r < size - 1 && c < size - 1 ? arr[r + 1][c + 1] : false;
+  if (returnVal === ".") {
+    return bottomRight(arr, r + 1, c + 1, opt);
+  } else return returnVal === opt;
 };
 
 const eval = (arr, r, c, opt) => {
@@ -69,19 +97,21 @@ while (true) {
       const stat = arr[r][c];
       if (stat === ".") {
         newArr[r] = newArr[r] + ".";
+        continue;
       }
       if (stat === "L") {
         if (eval(arr, r, c, "#") === 0) {
           newArr[r] = newArr[r] + "#";
         } else newArr[r] += "L";
       } else if (stat === "#") {
-        if (eval(arr, r, c, "#") >= 4) {
+        if (eval(arr, r, c, "#") >= 5) {
           newArr[r] = newArr[r] + "L";
         } else newArr[r] += "#";
       }
     }
   }
-  console.log(newArr);
+  console.log(newArr.join("\n"));
+  console.log("----------------");
   const newOccupiedSeatsCount = newArr.reduce(
     (total, row) =>
       total +
