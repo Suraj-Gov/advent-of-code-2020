@@ -1,5 +1,5 @@
 var fs = require("fs");
-const { cpuUsage } = require("process");
+
 
 const input = fs
   .readFileSync("./input.txt", {
