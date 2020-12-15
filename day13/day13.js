@@ -1,5 +1,4 @@
 var fs = require("fs");
-const { off } = require("process");
 
 const input = fs
   .readFileSync("./test.txt", {
@@ -32,8 +31,8 @@ const isInRange = (num, min, max) => {
   return num >= min && num <= max;
 };
 
-const offset = inputBusIDArr.sort((a, b) => a - b)[0];
-let minTime = 1;
+const offset = inputBusIDArr[0];
+let minTime = 0;
 let maxTime = offset;
 
 while (true) {
